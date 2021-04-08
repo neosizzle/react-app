@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const Create = () => {
     //uses controlled form, data is handled by react instead of DOM
@@ -6,10 +7,15 @@ const Create = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [author, setAuthor] = useState('yoshi');
+    const [isPending , setPending] = useState(false);
+    const history = useHistory();
 
     //submit handler
     const handleSubmit = (e)=>{
         e.preventDefault()
+
+        //set loading state 
+        setPending(true)
 
         const newBlog = {
             title,
@@ -17,7 +23,22 @@ const Create = () => {
             author
         }
 
-        console.log(newBlog)
+        fetch('http://localhost:8000/blogs' , {
+            method : 'POST',
+            headers : {'Content-Type' : "application/json" },
+            body : JSON.stringify(newBlog)
+        }).then((res)=>{
+            
+            //set pending state
+            setPending(false)
+
+            console.log("Blog created")
+           // history.go(-1) //go back and forth in time
+
+           //redirects page
+           history.push('/')
+        } 
+        )
     }
 
     return (  
@@ -54,12 +75,13 @@ const Create = () => {
                     <option value = "yoshi">yoshi</option>
 
                 </select>
-
-                <button> Submit </button>
+                
+                {!isPending && <button> Submit </button>}
+                
             </form>
 
-            <p>{title}</p>
-            <p>{body}</p>
+            {/*conditional rendering for pending state*/}
+            {isPending && <p>Creating blog...</p>}
 
         </div>
     );
