@@ -3,18 +3,31 @@ import { useState } from "react";
 const Create = () => {
     //uses controlled form, data is handled by react instead of DOM
     //blog title state
-    const [title, setTitle] = useState();
-    const [body, setBody] = useState();
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
     const [author, setAuthor] = useState('yoshi');
+
+    //submit handler
+    const handleSubmit = (e)=>{
+        e.preventDefault()
+
+        const newBlog = {
+            title,
+            body,
+            author
+        }
+
+        console.log(newBlog)
+    }
 
     return (  
         <div className = "create">
             <h2>Create a new blog</h2>
-            <form>
+            <form onSubmit = {handleSubmit}>
                 <label>Blog title</label>
                 <input
                 type = "text"
-                requried 
+                requried = "true"
                 value = {title} //set default value using state
                 onChange = {(e) =>{
                     setTitle(e.target.value)
@@ -23,7 +36,7 @@ const Create = () => {
 
                 <label>Blog body</label>
                 <textarea
-                requried 
+                requried = "true"
                 value = {body} //set default value using state
                 onChange = {(e) =>{
                     setBody(e.target.value)

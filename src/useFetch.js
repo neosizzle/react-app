@@ -47,7 +47,7 @@ const useFetch = (url)=>{
         )
     
         return () => abortCont.abort()
-      })
+      }, [])
 
       return{
           data,
